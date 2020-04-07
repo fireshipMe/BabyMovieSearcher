@@ -4,6 +4,7 @@ import './App.scss';
 const API_KEY = "fa555146006a08cf60f33c23067c8370";
 
 class Search extends React.Component<{}, { value: string, assumption: Array<String>}> {
+
   constructor(props: any) {
     super(props);
     this.state = {value: '', assumption: []};
@@ -12,27 +13,30 @@ class Search extends React.Component<{}, { value: string, assumption: Array<Stri
   }
 
   handleChange(event: any) {
-    let newState = event.target.value;
-    this.setState({value: newState});
-    this.makeRequest(newState);
-  }
+    let newValue = event.target.value;
+    this.setState({value: newValue});
+
+    this.makeRequest(newValue);
+    }
 
   async makeRequest(query: string) {
-    if(query != "") {
+    if(query !== "") {
       let api_quiery = "https://api.themoviedb.org/3/search/movie?api_key=" +  API_KEY + "&language=en-US&query=" + query.replace(" ", "%20");
-      let response = await fetch(api_quiery);
-      let json = await response.json();
-      let resTitles = []
-      for (let i = 0; i < 4; i++) {
-        resTitles.push(json.results[i].title);
-      }
-      this.setState({
-        assumption: resTitles
-      })
+      let resTitles: any[] = []
+      fetch(api_quiery)
+        .then(response => response.json())
+        .then(res => {
+            for (let i = 0; i < 4; i++) {
+              if(res.results[i] !== undefined) {
+                resTitles.push(res.results[i].title) 
+              } else {
+                return;
+              }
+            }
+        })
+        .then(() => this.setState({assumption: resTitles}))
     } else {
-      this.setState({
-        assumption: ["", "", "", ""]
-      });
+      this.setState({assumption: ["", "", "", ""]})
     }
   }
 

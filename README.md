@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### Oh god, he made yet another moviesearcher! Lets hire him before facebook did!
+
 ## Available Scripts
 
 In the project directory, you can run:
