@@ -44,20 +44,26 @@ class Search extends React.Component<{}, { value: string, assumption: Array<Stri
     return (
       <div className="App">
         <input type="text" className="main_input" onChange={this.handleChange}></input>
-        <AssumeBox assumption={this.state.assumption}/>
+        {this.state.value !== '' &&
+          <AssumeBox assumption={this.state.assumption}/>
+        }
       </div>
     );
   }
 }
 
 function Assumption(props: any) {
+  if (props.text) {
   return(
     <div className="assumption">
       <p>
         { props.text }
       </p>
-    </div>
-  );
+    </div> 
+  )
+  } else {
+    return null;
+  }
 }
 
 function AssumeBox(props: any) {
