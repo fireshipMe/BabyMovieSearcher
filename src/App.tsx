@@ -52,6 +52,10 @@ class Search extends React.Component<{}, { value: string, assumption: Array<Stri
   }
 }
 
+// ***
+// This worst function among of the ever written functions became a reason to first in my life issue
+// I'm not this bad, really.
+// *** 
 function Assumption(props: any) {
   if (props.text) {
   return(
