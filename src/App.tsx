@@ -1,54 +1,71 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 
+import MovieInfo from './components/MovieInfo/MovieInfo';
+
 import './App.scss';
 
-const API_KEY = "fa555146006a08cf60f33c23067c8370";
+const API_KEY = 'fa555146006a08cf60f33c23067c8370';
 
-class Search extends React.Component<{}, { value: string, assumption: Array<String>}> {
-
+class Search extends React.Component<
+  {},
+  { value: string; assumption: Array<String>; movieIds: Array<number> }
+> {
   constructor(props: any) {
     super(props);
-    this.state = {value: '', assumption: []};
+    this.state = { value: '', assumption: [], movieIds: [] };
     this.handleChange = this.handleChange.bind(this);
     this.makeRequest = this.makeRequest.bind(this);
   }
 
   handleChange(event: any) {
     let newValue = event.target.value;
-    this.setState({value: newValue});
+    this.setState({ value: newValue });
 
     this.makeRequest(newValue);
-    }
+  }
 
   async makeRequest(query: string) {
-    if(query !== "") {
-      let api_quiery = "https://api.themoviedb.org/3/search/movie?api_key=" +  API_KEY + "&language=en-US&query=" + query.replace(" ", "%20");
-      let resTitles: any[] = []
+    if (query !== '') {
+      let api_quiery =
+        'https://api.themoviedb.org/3/search/movie?api_key=' +
+        API_KEY +
+        '&language=en-US&query=' +
+        query.replace(' ', '%20');
+      let resTitles: any[] = [];
+      let resIds: number[] = [];
       fetch(api_quiery)
-        .then(response => response.json())
-        .then(res => {
-            for (let i = 0; i < 4; i++) {
-              if(res.results[i] !== undefined) {
-                resTitles.push(res.results[i].title) 
-              } else {
-                return;
-              }
+        .then((response) => response.json())
+        .then((res) => {
+          for (let i = 0; i < 4; i++) {
+            if (res.results[i] !== undefined) {
+              resTitles.push(res.results[i].title);
+              resIds.push(res.results[i].id);
+            } else {
+              return;
             }
+          }
         })
-        .then(() => this.setState({assumption: resTitles}))
+        .then(() => this.setState({ assumption: resTitles, movieIds: resIds }));
     } else {
-      this.setState({assumption: ["", "", "", ""]})
+      this.setState({ assumption: ['', '', '', ''] });
     }
   }
 
   render() {
     return (
       <div className="App">
-        <input type="text" className="main_input" onChange={this.handleChange}></input>
-        {this.state.value !== '' &&
-          <AssumeBox assumption={this.state.assumption}/>
-        }
+        <input
+          type="text"
+          className="main_input"
+          onChange={this.handleChange}
+        ></input>
+        {this.state.value !== '' && (
+          <AssumeBox
+            assumption={this.state.assumption}
+            id={this.state.movieIds}
+          />
+        )}
       </div>
     );
   }
@@ -57,40 +74,42 @@ class Search extends React.Component<{}, { value: string, assumption: Array<Stri
 // ***
 // This worst function among of the ever written functions became a reason to first in my life issue
 // I'm not this bad, really.
-// *** 
-function Assumption(props: any) {
+// ***
+const Assumption = (props: any) => {
   if (props.text) {
-  return(
-    <React.Fragment>
+    return (
+      <React.Fragment>
         <div className="assumption">
-         <Link to="/test">
-          <p>
-            { props.text }
-          </p>
-        </Link>
-        </div> 
-    </React.Fragment>
-  )
+          <Link to={'/' + props.id}>
+            <p>{props.text}</p>
+          </Link>
+        </div>
+      </React.Fragment>
+    );
   } else {
     return null;
   }
-}
+};
 
-function AssumeBox(props: any) {
+// I believe this should be somehow refactored, but have no idea how
+const AssumeBox = (props: any) => {
   return (
     <div className="assume_box">
-      <Assumption text={props.assumption[0]}/>
-      <Assumption text={props.assumption[1]}/>
-      <Assumption text={props.assumption[2]}/>
-      <Assumption text={props.assumption[3]}/>
+      <Assumption text={props.assumption[0]} id={props.id[0]} />
+      <Assumption text={props.assumption[1]} id={props.id[1]} />
+      <Assumption text={props.assumption[2]} id={props.id[2]} />
+      <Assumption text={props.assumption[3]} id={props.id[3]} />
     </div>
   );
-}
+};
 
-function App() {
+const App = () => {
   return (
+    <React.Fragment>
+      <Route path="/:id" component={MovieInfo}></Route>
       <Search />
+    </React.Fragment>
   );
-}
+};
 
 export default App;

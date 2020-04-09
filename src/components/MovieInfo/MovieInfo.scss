@@ -1,0 +1,19 @@
+.MovieInfo {
+  position: absolute;
+  display: flex;
+  width: 60vw;
+  height: 30vh;
+
+  margin-left: 20vw;
+  flex-direction: column;
+
+  &__description {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__title {
+    display: flex;
+    justify-content: center;
+  }
+}
