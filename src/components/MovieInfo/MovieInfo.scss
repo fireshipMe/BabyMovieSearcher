@@ -1,15 +1,16 @@
 .MovieInfo {
   position: absolute;
   display: flex;
-  width: 60vw;
+  width: 80vw;
   height: 30vh;
-
-  margin-left: 20vw;
+  margin-top: 2vh;
+  margin-left: 10vw;
   flex-direction: column;
 
   &__description {
     display: flex;
     justify-content: center;
+    margin-top: 1vh;
   }
 
   &__title {

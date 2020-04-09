@@ -1,11 +1,9 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, BrowserRouter, Switch } from 'react-router-dom';
 
 import MovieInfo from './components/MovieInfo/MovieInfo';
-
+import { Settings } from './config';
 import './App.scss';
-
-const API_KEY = 'fa555146006a08cf60f33c23067c8370';
 
 class Search extends React.Component<
   {},
@@ -29,7 +27,7 @@ class Search extends React.Component<
     if (query !== '') {
       let api_quiery =
         'https://api.themoviedb.org/3/search/movie?api_key=' +
-        API_KEY +
+        Settings.API_KEY +
         '&language=en-US&query=' +
         query.replace(' ', '%20');
       let resTitles: any[] = [];
@@ -105,10 +103,14 @@ const AssumeBox = (props: any) => {
 
 const App = () => {
   return (
-    <React.Fragment>
-      <Route path="/:id" component={MovieInfo}></Route>
-      <Search />
-    </React.Fragment>
+    <BrowserRouter>
+      <React.Fragment>
+        <Switch>
+          <Route path="/:id" exact component={MovieInfo}></Route>
+        </Switch>
+        <Search />
+      </React.Fragment>
+    </BrowserRouter>
   );
 };
 
