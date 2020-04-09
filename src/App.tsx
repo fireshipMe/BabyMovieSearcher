@@ -1,4 +1,6 @@
 import React from 'react';
+import { Route, Link } from 'react-router-dom';
+
 import './App.scss';
 
 const API_KEY = "fa555146006a08cf60f33c23067c8370";
@@ -59,11 +61,15 @@ class Search extends React.Component<{}, { value: string, assumption: Array<Stri
 function Assumption(props: any) {
   if (props.text) {
   return(
-    <div className="assumption">
-      <p>
-        { props.text }
-      </p>
-    </div> 
+    <React.Fragment>
+        <div className="assumption">
+         <Link to="/test">
+          <p>
+            { props.text }
+          </p>
+        </Link>
+        </div> 
+    </React.Fragment>
   )
   } else {
     return null;
