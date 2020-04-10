@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import { RouteComponentProps, Link } from 'react-router-dom';
 
 import { Settings } from '../../config';

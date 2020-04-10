@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Link, BrowserRouter, Switch } from 'react-router-dom';
-
+import _ from 'lodash';
 import MovieInfo from './components/MovieInfo/MovieInfo';
 import { Settings } from './config';
 import './App.scss';
@@ -20,8 +20,15 @@ class Search extends React.Component<
     let newValue = event.target.value;
     this.setState({ value: newValue });
 
-    this.makeRequest(newValue);
+    // this.makeRequest(newValue);
+    this.debouncedMakeRequest(newValue);
   }
+
+  private debouncedMakeRequest = _.debounce(
+    (query: string) => this.makeRequest(query),
+    500,
+    { maxWait: 1000 }
+  );
 
   async makeRequest(query: string) {
     if (query !== '') {
