@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { RouteComponentProps, Link } from 'react-router-dom';
 
 import { Settings } from '../../config';
@@ -35,7 +36,7 @@ class MovieInfo extends React.Component<
   }
 
   componentDidUpdate() {
-    this.makeRequest();
+    _.debounce(() => this.makeRequest(), 2000);
   }
 
   makeRequest() {
