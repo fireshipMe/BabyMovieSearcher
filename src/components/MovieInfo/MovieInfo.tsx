@@ -36,7 +36,7 @@ class MovieInfo extends React.Component<
   }
 
   componentDidUpdate() {
-    _.debounce(() => this.makeRequest(), 2000);
+    this.makeRequest();
   }
 
   makeRequest() {
