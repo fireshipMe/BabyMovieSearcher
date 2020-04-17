@@ -1,86 +1,57 @@
-import React from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import React from 'react'
+import { RouteComponentProps } from 'react-router-dom'
 
-import { Settings } from '../../config';
+import { Settings } from '../../config'
 
-import './MovieInfo.scss';
-interface Props {
-  id: number;
+import './MovieInfo.scss'
+
+type Props = RouteComponentProps<{ id?: string }>
+
+type State = {
+  title: string,
+  overview: string,
 }
 
-interface MatchParams {
-  id?: string;
-}
-interface State {
-  title: string;
-  description: string;
-}
-
-class MovieInfo extends React.Component<
-  Props & RouteComponentProps<MatchParams>,
-  State
-> {
-  // I promise if i will ever use ANY i will slap myself
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      title: 'loading...',
-      description: 'loading...',
-    };
+export class MovieInfo extends React.Component<Props, State> {
+  state = {
+    title: 'loading...',
+    overview: 'loading...',
   }
 
-  // Not sure if this should look like this
   componentDidMount() {
-    this.makeRequest();
+    this.makeRequest(this.props.match.params.id)
   }
 
-  componentDidUpdate() {
-    this.makeRequest();
-  }
-
-  makeRequest() {
-    let prevState = this.state;
-    let api_quiery =
-      'https://api.themoviedb.org/3/movie/' +
-      this.props.match.params.id +
-      '?api_key=' +
-      Settings.API_KEY;
-
-    fetch(api_quiery)
-      .then((response) => response.json())
-      .then((response) => {
-        if (prevState.title !== response.title) {
-          this.setState({
-            title: response.title,
-            description: response.overview,
-          });
-        }
-      });
+  componentDidUpdate(prevProps: Props) {
+    const { id } = this.props.match.params
+    const { id: prevId } = prevProps.match.params
+    
+    if (id && id !== prevId) {
+      this.makeRequest(id)
+    }
   }
 
   render() {
+    const { title, overview } = this.state
+
     return (
-      <div className="MovieInfo">
-        <MovieDescription
-          description={this.state.description}
-          title={this.state.title}
-        />
+      <div className="movieInfo">
+        <h2 className="movieInfo__title">{title}</h2>
+        <p className="movieInfo__description">{overview}</p>
       </div>
-    );
+    )
   }
+
+  makeRequest = (id: string | void) => {
+    if (!id) {
+      console.warn('id should not be empty')
+      return
+    }
+
+    fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${Settings.API_KEY}`)
+      .then((response) => response.json())
+      .then(this.success)
+  }
+
+  success = ({ title, overview }: { title: string, overview: string}) => this.setState({ title, overview })
 }
-
-// Ok, to stop using ANY read this when refactor :
-// https://www.pluralsight.com/guides/how-to-statically-type-react-components-with-typescript
-const MovieDescription = (props: any) => {
-  return (
-    <React.Fragment>
-      <div className="MovieInfo__title">
-        <h2>{props.title}</h2>
-      </div>
-      <div className="MovieInfo__description"> {props.description} </div>
-    </React.Fragment>
-  );
-};
-
-export default MovieInfo;
