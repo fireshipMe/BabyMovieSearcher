@@ -1,11 +1,16 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { createRequest } from '../../lib/api';
-
+import _ from 'lodash';
 import styles from './styles.module.scss';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 type Props = RouteComponentProps<{ id?: string }>;
+
+type FavProps = {
+  id: string;
+  title: string;
+};
 
 type State = {
   id: string;
@@ -40,11 +45,9 @@ export const MovieInfo = ({ match }: Props) => {
   );
 };
 
-type FavProps = {
-  id: string;
-  title: string;
+type RootState = {
+  favorites: any;
 };
-
 const AddToFavorites = ({ id, title }: FavProps) => {
   const dispatch = useDispatch();
 
@@ -55,6 +58,23 @@ const AddToFavorites = ({ id, title }: FavProps) => {
       title: title,
     });
   };
+
+  const handleRemFavorite = () => {
+    dispatch({
+      type: 'REM_FAVORITE',
+      id: id,
+    });
+  };
+
+  // Check if we alredy have it marked favorite
+  const favorites = useSelector((state: RootState) => state.favorites);
+  if (_.find(favorites, { id: id })) {
+    return (
+      <p className={styles.addToFavorites} onClick={() => handleRemFavorite()}>
+        Unmark as favorite
+      </p>
+    );
+  }
 
   return (
     <p className={styles.addToFavorites} onClick={() => handleAddFavorite()}>

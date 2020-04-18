@@ -13,6 +13,14 @@
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
   }
+
+  ul {
+    list-style: none;
+  }
+
+  :link {
+    text-decoration: none;
+  }
 }
 
 .movies {

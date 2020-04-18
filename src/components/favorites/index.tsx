@@ -13,9 +13,7 @@ type State = {
 };
 
 export const Favorites = () => {
-  // const fav = (state: State) => state.favorites;
   const favorites = useSelector((state: State) => state.favorites);
-  // favorites.length > 0 ?  : null;
   return (
     <div className={styles.favorites}>
       <ul>{favorites.map(Favorite)}</ul>
