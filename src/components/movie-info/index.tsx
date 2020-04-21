@@ -39,7 +39,7 @@ export const MovieInfo = ({ match }: Props) => {
   return (
     <div className={styles.movieInfo}>
       <h2 className={styles.title}>{state.title}</h2>
-      <AddToFavorites id={state.id} title={state.title} />
+      <HandleFavorites id={state.id} title={state.title} />
       <p className={styles.description}>{state.overview}</p>
     </div>
   );
@@ -48,7 +48,7 @@ export const MovieInfo = ({ match }: Props) => {
 type RootState = {
   favorites: any;
 };
-const AddToFavorites = ({ id, title }: FavProps) => {
+const HandleFavorites = ({ id, title }: FavProps) => {
   const dispatch = useDispatch();
 
   const handleAddFavorite = () => {
@@ -70,14 +70,14 @@ const AddToFavorites = ({ id, title }: FavProps) => {
   const favorites = useSelector((state: RootState) => state.favorites);
   if (_.find(favorites, { id: id })) {
     return (
-      <p className={styles.addToFavorites} onClick={() => handleRemFavorite()}>
+      <p className={styles.handleFavorites} onClick={() => handleRemFavorite()}>
         Unmark as favorite
       </p>
     );
   }
 
   return (
-    <p className={styles.addToFavorites} onClick={() => handleAddFavorite()}>
+    <p className={styles.handleFavorites} onClick={() => handleAddFavorite()}>
       Mark as favorite
     </p>
   );

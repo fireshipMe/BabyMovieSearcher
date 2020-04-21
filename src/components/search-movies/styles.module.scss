@@ -65,7 +65,11 @@
   outline: none;
   border-radius: 8px;
   border-color: black;
-  animation: 1.5s ease-out 0s 1 slide-from-top;
+  animation-duration: 1.5s;
+  animation-delay: 0;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
+  animation-name: slide-from-top;
   margin-top: 30vh;
 }
 
